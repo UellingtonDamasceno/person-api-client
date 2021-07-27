@@ -24,4 +24,8 @@ class Person {
   set cpf(String cpf) => this._cpf = cpf;
   set birthDate(String birthDate) => this._birthDate = birthDate;
   set phones(List<Phone> phones) => this._phones = phones;
+
+  String toString() {
+    return this.firstName + " " + this.lastName;
+  }
 }

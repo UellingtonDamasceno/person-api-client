@@ -23,7 +23,7 @@ class PersonRepository {
     return _personMapper.fromJson(response.data);
   }
 
-  deletePersonById(int id) async {
+  void deletePersonById(int id) async {
     await _client.delete('/people/$id');
   }
 }
