@@ -74,15 +74,25 @@ class _PersonListState extends State<PersonList> {
                     onDismissed: (direction) {
                       Person person = snapshot.data!.elementAt(index);
                       if (direction == DismissDirection.startToEnd) {
-                        print("praca");
+                        //TODO: Editar
                       } else {
                         _showDeleteDialogConfirmation(snapshot, person);
                       }
                     },
                     child: ListTile(
-                      title: Text(person.firstName + ' ' + person.lastName),
-                      subtitle: Text(person.cpf),
-                      trailing: Icon(Icons.plus_one),
+                      title: Text(
+                        person.firstName + ' ' + person.lastName,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text("(00) 0000-0000",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      trailing: Icon(Icons.person),
                     ),
                     background: Container(
                       padding: EdgeInsets.only(left: 20),
@@ -110,7 +120,7 @@ class _PersonListState extends State<PersonList> {
               builder: (context) {
                 return Container(
                   padding: EdgeInsets.all(20),
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.75,
                   child: Form(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -123,6 +133,7 @@ class _PersonListState extends State<PersonList> {
                           ),
                         ),
                         TextFormField(
+                          autofocus: true,
                           decoration: InputDecoration(labelText: 'Nome'),
                         ),
                         TextFormField(

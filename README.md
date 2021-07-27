@@ -1,16 +1,27 @@
-# person_api_client
+# person-api-client
 
-A new Flutter project.
+Esse projeto surge como desafio complementar para a API que gerencia pessoas de uma organização proposto pela plataforma de ensino DIO e pode ser encontrado nesse [repositório](https://github.com/UellingtonDamasceno/person-api).
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- [x] Splash Screen.
+- [x] Listar todas as pessoas.
+  - [ ] Permitir a exibição asc/dec.
+  - [ ] Filtrar por nome.
+- [x] Deletar uma pessoa.
+- [ ] Adicionar uma nova pessoa.
+- [ ] Atualizar uma pessoa.
 
-A few resources to get you started if this is your first Flutter project:
+## Screnshots
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+| <img src="assets/images/gifs/splash.gif" height="500em"> | <img src="assets/images/gifs/add.gif" height="500em"> | <img src="assets/images/gifs/delete.gif" height="500em"> |
+| -------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------- |
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Créditos
+
+Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+
+---
+
+| :arrow_left: [Mais flutter](https://github.com/UellingtonDamasceno/clash-of-clans-cards) | ............................... :arrow_up: [Voltar ao topo](#person-api-client) :arrow_up: ............................... | [Person API](https://github.com/UellingtonDamasceno/person-api) :arrow_right: |
+| :--------------------------------------------------------------------------------------: | -------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------: |
