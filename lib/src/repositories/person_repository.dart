@@ -26,4 +26,9 @@ class PersonRepository {
   void deletePersonById(int id) async {
     await _client.delete('/people/$id');
   }
+
+  void save(Person person) {
+    var personJSON = this._personMapper.toJson(person);
+    this._client.post('/people', queryParameters: personJSON);
+  }
 }

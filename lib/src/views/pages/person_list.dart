@@ -16,8 +16,8 @@ class PersonList extends StatefulWidget {
 }
 
 class _PersonListState extends State<PersonList> {
-  var _repository;
-  late Future<List<Person>> _people;
+  late PersonRepository _repository;
+  var _people;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _PersonListState extends State<PersonList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Peoples"),
+        title: Text("People"),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
@@ -103,15 +103,45 @@ class _PersonListState extends State<PersonList> {
           }),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.person_add),
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.all(20),
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: Form(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Adicionar pessoa",
+                          style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Nome'),
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Sobrenome'),
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'CPF'),
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Telefone'),
+                        ),
+                        ElevatedButton(onPressed: () {}, child: Text("Salvar"))
+                      ],
+                    ),
+                  ),
+                );
+              });
+        },
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
-        child: Container(
-          height: 50,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
