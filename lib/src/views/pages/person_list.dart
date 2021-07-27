@@ -39,7 +39,19 @@ class _PersonListState extends State<PersonList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Peoples")),
+      appBar: AppBar(
+        title: Text("Peoples"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              setState(() {
+                _people = _repository.findAll();
+              });
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder(
           future: _people,
           builder: (var context, AsyncSnapshot<List<Person>> snapshot) {
@@ -54,6 +66,7 @@ class _PersonListState extends State<PersonList> {
             } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
+                physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   var person = snapshot.data![index];
                   return Dismissible(
@@ -90,11 +103,7 @@ class _PersonListState extends State<PersonList> {
           }),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.person_add),
-        onPressed: () {
-          setState(() {
-            _people = _repository.findAll();
-          });
-        },
+        onPressed: () {},
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.blue,

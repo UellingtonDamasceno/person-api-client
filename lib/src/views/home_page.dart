@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:person_api_client/src/views/pages/person_list.dart';
+import 'package:person_api_client/src/views/pages/splash_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -7,7 +8,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PersonList(),
+      title: "People",
+      initialRoute: "/splash",
+      routes: {
+        "/splash": (context) => SplashScreen(),
+        "/home": (context) => PersonList(),
+      },
     );
   }
 }
