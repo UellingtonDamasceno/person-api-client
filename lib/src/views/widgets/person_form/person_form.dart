@@ -58,6 +58,7 @@ class _PersonFormState extends State<PersonForm> {
                   _person.phones = [Phone.mobile(phoneController.text)];
                   _person.birthDate = "11-04-1450";
                   widget.personListBloc.save(_person);
+                  Navigator.of(context).pop();
                 },
                 child: Text("Salvar"))
           ],

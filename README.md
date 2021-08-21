@@ -6,7 +6,7 @@ Esse projeto surge como desafio complementar para a API que gerencia pessoas de 
 
 - [x] Splash Screen.
 - [x] Listar todas as pessoas.
-  - [ ] Permitir a exibição asc/dec.
+  - [x] Permitir a exibição asc/dec.
   - [ ] Filtrar por nome.
 - [x] Deletar uma pessoa.
 - [x] Adicionar uma nova pessoa.

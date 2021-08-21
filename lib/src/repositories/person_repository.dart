@@ -19,7 +19,6 @@ class PersonRepository {
 
   Future<Person> getPersonById(String id) async {
     var response = await _client.get('/people/$id');
-    print(response);
     return _personMapper.fromJson(response.data);
   }
 
@@ -30,6 +29,6 @@ class PersonRepository {
   save(Person person) async {
     var personJSON = this._personMapper.toJson(person);
     print(personJSON);
-    await this._client.post('/people', data: personJSON);
+    return await this._client.post('/people', data: personJSON);
   }
 }

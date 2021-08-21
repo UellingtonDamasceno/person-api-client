@@ -7,14 +7,30 @@ class PersonListBloc {
   final PersonRepository _repository;
   final StreamController _streamController =
       StreamController<List<Person>>.broadcast();
+
   Stream get streamOut => _streamController.stream;
   Sink get streamIn => _streamController.sink;
 
   List<Person> _people = [];
 
   var lastRemovedPerson;
+  bool _isSorted;
 
-  PersonListBloc(this._repository);
+  PersonListBloc(this._repository, this._isSorted);
+
+  bool isSorted() {
+    return _isSorted;
+  }
+
+  changeSort() {
+    print("sorting");
+    this._isSorted = !this._isSorted;
+    _people.sort(this._isSorted
+        ? (a, b) => a.firstName.compareTo(b.firstName)
+        : (a, b) => b.firstName.compareTo(a.firstName));
+    print(_people);
+    this.streamIn.add(_people);
+  }
 
   void initialize() {
     _repository
@@ -32,12 +48,16 @@ class PersonListBloc {
   }
 
   void deleteById(int id) {
+    this._repository.deletePersonById(id);
     lastRemovedPerson = _people.firstWhere((element) => element.id == id);
     _people.removeWhere((element) => element.id == id);
     streamIn.add(_people);
   }
 
   void save(Person person) {
+    if (_people.contains(person)) {
+      return;
+    }
     this._repository.save(person);
     _people.add(person);
     streamIn.add(_people);

@@ -28,7 +28,7 @@ class _PersonListState extends State<PersonList> {
     PersonMapper personMapper = PersonMapper(PhoneMapper());
     PersonRepository repository = PersonRepository(personMapper, client);
 
-    this._personListBloc = new PersonListBloc(repository);
+    this._personListBloc = new PersonListBloc(repository, true);
     this._personListBloc.initialize();
     super.initState();
   }
@@ -45,6 +45,18 @@ class _PersonListState extends State<PersonList> {
       appBar: AppBar(
         title: Text("People"),
         actions: [
+          IconButton(
+            icon: Icon(
+              Icons.sort,
+              color: _personListBloc.isSorted()
+                  ? Colors.blue.shade900
+                  : Colors.blue.shade50,
+            ),
+            onPressed: () {
+              this._personListBloc.changeSort();
+              setState(() {});
+            },
+          ),
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {},
@@ -75,7 +87,7 @@ class _PersonListState extends State<PersonList> {
                         //TODO: Editar
                       } else {
                         _personListBloc.lastRemovedPerson = person;
-                        _showDeleteDialogConfirmation(person.id);
+                        _showDeleteDialogConfirmation(person);
                       }
                     },
                     child: ListTile(
@@ -127,8 +139,7 @@ class _PersonListState extends State<PersonList> {
     );
   }
 
-  Future<void> _showDeleteDialogConfirmation(int index) async {
-    Person person = this._personListBloc.getById(index);
+  Future<void> _showDeleteDialogConfirmation(Person person) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -162,7 +173,7 @@ class _PersonListState extends State<PersonList> {
                 ),
               ),
               onPressed: () {
-                this._personListBloc.deleteById(index);
+                this._personListBloc.deleteById(person.id);
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
