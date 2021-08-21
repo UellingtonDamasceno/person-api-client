@@ -7,6 +7,9 @@ class Phone {
       : _id = 0,
         _type = "COMERCIAL";
 
+  Phone.mobile(this._number)
+      : _id = 0,
+        _type = "MOBILE";
   Phone(this._id, this._type, this._number);
 
   int get id => this._id;

@@ -38,7 +38,7 @@ class PersonListBloc {
   }
 
   void save(Person person) {
-    // this._repository.save(person);
+    this._repository.save(person);
     _people.add(person);
     streamIn.add(_people);
   }

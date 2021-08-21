@@ -9,7 +9,7 @@ Esse projeto surge como desafio complementar para a API que gerencia pessoas de 
   - [ ] Permitir a exibição asc/dec.
   - [ ] Filtrar por nome.
 - [x] Deletar uma pessoa.
-- [ ] Adicionar uma nova pessoa.
+- [x] Adicionar uma nova pessoa.
 - [ ] Atualizar uma pessoa.
 
 ## Screnshots

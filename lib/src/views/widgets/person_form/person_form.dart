@@ -55,7 +55,8 @@ class _PersonFormState extends State<PersonForm> {
                   _person.firstName = firstNameController.text;
                   _person.lastName = lastNameController.text;
                   _person.cpf = cpfController.text;
-                  _person.phones = [Phone.comercial(phoneController.text)];
+                  _person.phones = [Phone.mobile(phoneController.text)];
+                  _person.birthDate = "11-04-1450";
                   widget.personListBloc.save(_person);
                 },
                 child: Text("Salvar"))

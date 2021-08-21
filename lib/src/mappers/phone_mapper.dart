@@ -13,7 +13,6 @@ class PhoneMapper extends ClassMapper<Phone> {
   @override
   Map<String, dynamic> toJson(Phone phone) {
     final Map<String, dynamic> data = new Map();
-    data['id'] = phone.id;
     data['type'] = phone.type;
     data['number'] = phone.number;
     return data;

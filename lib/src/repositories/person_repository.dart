@@ -27,8 +27,9 @@ class PersonRepository {
     await _client.delete('/people/$id');
   }
 
-  save(Person person) {
+  save(Person person) async {
     var personJSON = this._personMapper.toJson(person);
-    return this._client.post('/people', queryParameters: personJSON);
+    print(personJSON);
+    await this._client.post('/people', data: personJSON);
   }
 }
