@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:person_api_client/src/views/pages/person_list.dart';
+import 'package:person_api_client/src/views/pages/person_list/person_list.dart';
 import 'package:person_api_client/src/views/pages/splash_screen.dart';
 
 class HomePage extends StatelessWidget {

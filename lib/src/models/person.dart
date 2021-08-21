@@ -8,6 +8,14 @@ class Person {
   String _birthDate;
   List<Phone> _phones;
 
+  Person.empty()
+      : _id = 0,
+        _firstName = "",
+        _lastName = "",
+        _cpf = "",
+        _birthDate = "",
+        _phones = [];
+
   Person(this._id, this._firstName, this._lastName, this._cpf, this._birthDate,
       this._phones);
 

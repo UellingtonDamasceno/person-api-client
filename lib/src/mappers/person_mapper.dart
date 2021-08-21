@@ -29,7 +29,6 @@ class PersonMapper extends ClassMapper<Person> {
   @override
   Map<String, dynamic> toJson(Person person) {
     final Map<String, dynamic> data = new Map();
-    data['id'] = person.id;
     data['firstName'] = person.firstName;
     data['lastName'] = person.lastName;
     data['cpf'] = person.cpf;

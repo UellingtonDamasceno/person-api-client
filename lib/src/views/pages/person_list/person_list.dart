@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:person_api_client/src/mappers/person_mapper.dart';
 import 'package:person_api_client/src/models/person.dart';
 import 'package:person_api_client/src/repositories/person_repository.dart';
+import 'package:person_api_client/src/views/pages/person_list/person_list_bloc.dart';
+import 'package:person_api_client/src/views/widgets/person_form/person_form.dart';
 
-import '../../mappers/person_mapper.dart';
-import '../../mappers/phone_mapper.dart';
-import '../../repositories/person_repository.dart';
+import '../../../mappers/person_mapper.dart';
+import '../../../mappers/phone_mapper.dart';
+import '../../../repositories/person_repository.dart';
 
 class PersonList extends StatefulWidget {
   const PersonList({Key? key}) : super(key: key);
@@ -16,24 +18,25 @@ class PersonList extends StatefulWidget {
 }
 
 class _PersonListState extends State<PersonList> {
-  late PersonRepository _repository;
-  var _people;
+  var _personListBloc;
 
   @override
   void initState() {
-    var options = BaseOptions(
-      baseUrl: 'https://my-person-api.herokuapp.com/api/v1',
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    );
+    Dio client = Dio();
+    client.options.baseUrl = 'https://my-person-api.herokuapp.com/api/v1';
 
-    Dio client = Dio(options);
     PersonMapper personMapper = PersonMapper(PhoneMapper());
+    PersonRepository repository = PersonRepository(personMapper, client);
 
-    _repository = PersonRepository(personMapper, client);
-    _people = _repository.findAll();
-
+    this._personListBloc = new PersonListBloc(repository);
+    this._personListBloc.initialize();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    this._personListBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,16 +47,12 @@ class _PersonListState extends State<PersonList> {
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {
-                _people = _repository.findAll();
-              });
-            },
+            onPressed: () {},
           ),
         ],
       ),
-      body: FutureBuilder(
-          future: _people,
+      body: StreamBuilder<List<Person>>(
+          stream: this._personListBloc.streamOut,
           builder: (var context, AsyncSnapshot<List<Person>> snapshot) {
             if (!snapshot.hasData) {
               return Center(
@@ -70,13 +69,13 @@ class _PersonListState extends State<PersonList> {
                 itemBuilder: (context, index) {
                   var person = snapshot.data![index];
                   return Dismissible(
-                    key: Key("$person.id"),
+                    key: UniqueKey(),
                     onDismissed: (direction) {
-                      Person person = snapshot.data!.elementAt(index);
                       if (direction == DismissDirection.startToEnd) {
                         //TODO: Editar
                       } else {
-                        _showDeleteDialogConfirmation(snapshot, person);
+                        _personListBloc.lastRemovedPerson = person;
+                        _showDeleteDialogConfirmation(person.id);
                       }
                     },
                     child: ListTile(
@@ -87,11 +86,13 @@ class _PersonListState extends State<PersonList> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      subtitle: Text("(00) 0000-0000",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      subtitle: Text(
+                        '${person.cpf}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       trailing: Icon(Icons.person),
                     ),
                     background: Container(
@@ -115,49 +116,19 @@ class _PersonListState extends State<PersonList> {
         child: Icon(Icons.person_add),
         onPressed: () {
           showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (context) {
-                return Container(
-                  padding: EdgeInsets.all(20),
-                  height: MediaQuery.of(context).size.height * 0.75,
-                  child: Form(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          "Adicionar pessoa",
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextFormField(
-                          autofocus: true,
-                          decoration: InputDecoration(labelText: 'Nome'),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Sobrenome'),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'CPF'),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Telefone'),
-                        ),
-                        ElevatedButton(onPressed: () {}, child: Text("Salvar"))
-                      ],
-                    ),
-                  ),
-                );
-              });
+            context: context,
+            isScrollControlled: true,
+            builder: (context) {
+              return PersonForm(personListBloc: this._personListBloc);
+            },
+          );
         },
       ),
     );
   }
 
-  Future<void> _showDeleteDialogConfirmation(
-      AsyncSnapshot<List<Person>> people, Person person) async {
+  Future<void> _showDeleteDialogConfirmation(int index) async {
+    Person person = this._personListBloc.getById(index);
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -179,7 +150,7 @@ class _PersonListState extends State<PersonList> {
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
-                people.data!.add(person);
+                this._personListBloc.resetLastRemovedPerson();
                 Navigator.of(context).pop();
               },
             ),
@@ -191,6 +162,7 @@ class _PersonListState extends State<PersonList> {
                 ),
               ),
               onPressed: () {
+                this._personListBloc.deleteById(index);
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -199,7 +171,9 @@ class _PersonListState extends State<PersonList> {
                     action: SnackBarAction(
                       label: 'Undo',
                       textColor: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {
+                        this._personListBloc.resetLastRemovedPerson();
+                      },
                     ),
                   ),
                 );

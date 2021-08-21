@@ -23,12 +23,12 @@ class PersonRepository {
     return _personMapper.fromJson(response.data);
   }
 
-  void deletePersonById(int id) async {
+  deletePersonById(int id) async {
     await _client.delete('/people/$id');
   }
 
-  void save(Person person) {
+  save(Person person) {
     var personJSON = this._personMapper.toJson(person);
-    this._client.post('/people', queryParameters: personJSON);
+    return this._client.post('/people', queryParameters: personJSON);
   }
 }
